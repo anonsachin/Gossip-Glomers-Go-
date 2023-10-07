@@ -10,3 +10,8 @@ broadcast-test:
 
 unique-id:
 	cd maelstrom; ./maelstrom test -w unique-ids --bin ../main --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition || echo failure
+
+setup-maelstrom:
+	wget https://github.com/jepsen-io/maelstrom/releases/download/v0.2.3/maelstrom.tar.bz2
+	tar -xvf maelstrom.tar.bz2
+	rm maelstrom.tar.bz2
