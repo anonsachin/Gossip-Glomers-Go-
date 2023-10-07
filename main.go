@@ -2,10 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 	"log"
+	"malestrom-echo/pkg/gossip"
 	"math/rand"
+	"os"
 	"time"
+
+	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
 func main() {
@@ -40,6 +43,23 @@ func main() {
 		return n.Reply(msg, body)
 
 	})
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	// logger
+	////////////////////////////////////////////////////////////////////////////////////////
+	f, err := os.OpenFile("/tmp/testlogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+
+	if err != nil {
+		log.Fatalf("File testlogfile not created!")
+	}
+	defer f.Close()
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// Handling Gossip messages
+	/////////////////////////////////////////////////////////////////////////////////////////
+	g := gossip.NewGossipHandler(n, f)
+	n.Handle("broadcast", g.Broadcast)
+	n.Handle("read",g.Read)
+	n.Handle("topology", g.Topology)
 
 	if err := n.Run(); err != nil {
 		log.Fatal(err)
