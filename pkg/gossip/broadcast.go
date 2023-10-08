@@ -83,6 +83,7 @@ func (g *Gossip) Broadcast(msg maelstrom.Message) error {
 
 	response["type"] = "broadcast_ok"
 	response["msg_id"] = body["msg_id"]
+	
 	////////////////////////////////////////////
 	// Mutex is being used here so that shared
 	// resources are accessed properly
@@ -90,6 +91,17 @@ func (g *Gossip) Broadcast(msg maelstrom.Message) error {
 	g.lock.Lock()
 	g.messages = append(g.messages, intValue)
 	g.lock.Unlock()
+
+	///////////////////////////////////////////
+	// send message to the other nodes
+	//////////////////////////////////////////
+	nodes := make(map[string]bool)
+	for k := range g.topology{
+		
+		g.Node.Send(k,body)
+		nodes[k] = true
+	}
+
 	return g.Node.Reply(msg, response)
 }
 
