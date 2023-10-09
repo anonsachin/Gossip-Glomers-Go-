@@ -5,7 +5,7 @@ clean-build:
 	rm main
 	go build -race main.go
 
-broadcast-test-partb:
+broadcast-test-multi-node:
 	cd maelstrom; ./maelstrom test -w broadcast --bin ../main --node-count 5 --time-limit 20 --rate 10 || echo failure
 
 broadcast-test:

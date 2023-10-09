@@ -25,6 +25,8 @@ jobs:
       # Tests of the challenge
       - name: Run Unique ID Test
         run: make unique-id
-      - name: Run Broadcast Test
+      - name: Run Broadcast single node test
         run: make broadcast-test
+      - name: Run Broadcast multi node test
+        run: make broadcast-test-multi-node
 
